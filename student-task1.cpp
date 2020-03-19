@@ -11,7 +11,7 @@ using namespace std;
 class Person{
 	protected:
 		string name;
-	    
+
 	public:
 		void setname(char const *);
 		string getname();
@@ -68,7 +68,7 @@ class Student : public Person{
 		double grade;
 
 	public:
-      	
+
       	void setgrade(double);
       	double getgrade();
 
@@ -117,12 +117,60 @@ Student::~Student()
 {
 }
 
-int main()
-{  
+int main() {
+	list<Student> students;
+	list<Student>::iterator i;
+	bool moreToEnter = true;
+	string name;
+	double grade;
 
-	// Write your code for Task 1
-		
+	// Allow the user to enter more students while they have more to enter
+	while (moreToEnter) {
+		cout << "Please enter student name (or DONE to stop): ";
+		cin >> name;
+
+		// Make sure we have another student to add
+		if (name != "DONE") {
+			cout << "Please enter student grade: ";
+			cin >> grade;
+
+			// Create the new Student
+			Student s = Student(name.c_str(), grade);
+
+			// Loop through each student until we have inserted it
+			i = students.begin();
+			bool inserted = false;
+			while (!inserted) {
+				// Find the correct spot to insert the student in the list
+				// This will either occur at the end, or when we find one with
+				// a grade value greater than the one just made (Student s)
+				if (i == students.end() || s.getgrade() < (*i).getgrade()) {
+					students.insert(i, s);
+					// Stop the loop, we have found and inserted into our spot
+					inserted = true;
+				}
+				i++;
+			}
+		} else {
+			// User has entered DONE, meaning that they entered all their students
+			moreToEnter = false;
+		}
+	}
+
+	// Print out the students in ascending order
+	cout << "Printing out the students in ascending order..." << '\n';
+	for (i = students.begin(); i != students.end(); ++i) {
+		cout << (*i);
+		cout << '\n';
+	}
+	cout << '\n';
+
+	// Print out the students in descending order
+	cout << "Printing out the students in descending order..." << '\n';
+	list<Student>::reverse_iterator j;
+	for (j = students.rbegin(); j != students.rend(); ++j) {
+		cout << (*j);
+		cout << '\n';
+	}
+	cout << '\n';
 }
-
-
-
